@@ -1,0 +1,4 @@
+User-Agent: *
+Allow: /
+
+Sitemap: https://evtrack.vercel.app/sitemap.xml
