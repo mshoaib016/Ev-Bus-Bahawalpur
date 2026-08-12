@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://evtrack.vercel.app"),
+  metadataBase: new URL("https://mshoaib016.github.io/Ev-Bus-Bahawalpur/"),
   title: {
     default: "EV Green Bus | Smarter, Greener Journeys",
     template: "%s | EV Green Bus",
@@ -19,18 +19,18 @@ export const metadata: Metadata = {
     "city transit",
     "EV transportation",
   ],
-  authors: [{ name: "EV Green Bus", url: "https://evtrack.vercel.app" }],
+  authors: [{ name: "EV Green Bus", url: "https://mshoaib016.github.io/Ev-Bus-Bahawalpur/" }],
   alternates: { canonical: "/", languages: { en: "/", ur: "/?lang=ur" } },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://evtrack.vercel.app/",
+    url: "https://mshoaib016.github.io/Ev-Bus-Bahawalpur/",
     siteName: "EV Green Bus",
     title: "EV Green Bus — Smarter, Greener Journeys",
     description: "A cleaner, calmer way to move around the city.",
     images: [
       {
-        url: "https://evtrack.vercel.app/opengraph-image",
+        url: "https://mshoaib016.github.io/Ev-Bus-Bahawalpur/",
         width: 1200,
         height: 630,
         alt: "EV electric green bus service",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "EV Green Bus",
     description: "Smarter, greener journeys for everyone.",
-    images: ["https://evtrack.vercel.app/opengraph-image"],
+    images: ["https://mshoaib016.github.io/Ev-Bus-Bahawalpur/"],
   },
   robots: {
     index: true,
