@@ -32,6 +32,13 @@ const Icon = ({ name, size = 20 }: { name: string; size?: number }) => {
       "M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M9.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75",
     quote:
       "M7 8c-2.2 0-4 1.8-4 4v6h6v-6H6.5C6.5 10.5 7.8 9 9.5 9V8Zm10 0c-2.2 0-4 1.8-4 4v6h6v-6h-2.5c0-1.5 1.3-3 3-3V8Z",
+    star: "m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z",
+    facebook:
+      "M14 9h3V5h-3c-2.2 0-4 1.8-4 4v2H8v4h2v6h4v-6h3l1-4h-4V9c0-.6.4-1 1-1Z",
+    instagram:
+      "M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm5 5.5A3.5 3.5 0 1 0 12 15.5 3.5 3.5 0 0 0 12 8.5ZM17.5 6.5h.01",
+    twitter:
+      "M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4a4.1 4.1 0 0 1-1.9.1c.5 1.6 2.1 2.8 3.9 2.9A8.2 8.2 0 0 1 2 18.6a11.6 11.6 0 0 0 6.3 1.8c7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.3Z",
   };
   return (
     <svg
@@ -761,6 +768,12 @@ const heroImages = [
   "/hero-banner-3.png",
 ];
 
+// 👇 Interior slider photos — swap these 3 URLs for your own interior photos any time
+const interiorImages = ["/Banner-1.jpg", "/Banner-2.jpg", "/Banner-3.jpg"];
+
+// 👇 Footer background photo — sits under a green tint/overlay (see .footer-overlay)
+const footerImage = "/footer-bg.png";
+
 function VisitorTools() {
   const [poster, setPoster] = useState(false);
   const [urdu, setUrdu] = useState(false);
@@ -952,6 +965,68 @@ function HeroSlider() {
         />
       ))}
       <div className="hero-bg-overlay" />
+    </div>
+  );
+}
+
+// 👇 Interior photo slider — cross-fades through 3 images, same pattern as HeroSlider
+function InteriorSlider() {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const slides = slideRefs.current.filter(Boolean) as HTMLDivElement[];
+      if (slides.length === 0) return;
+
+      gsap.set(slides, { opacity: 0 });
+      gsap.set(slides[0], { opacity: 1 });
+
+      let current = 0;
+
+      const interval = setInterval(() => {
+        const next = (current + 1) % slides.length;
+
+        gsap.to(slides[current], {
+          opacity: 0,
+          duration: 1.2,
+          ease: "power2.inOut",
+        });
+        gsap.to(slides[next], {
+          opacity: 1,
+          duration: 1.2,
+          ease: "power2.inOut",
+        });
+
+        current = next;
+        setActive(next);
+      }, 3800);
+
+      return () => clearInterval(interval);
+    }, wrapRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <div className="interior-slider-wrap" ref={wrapRef}>
+      {interiorImages.map((img, i) => (
+        <div
+          key={i}
+          ref={(el) => {
+            slideRefs.current[i] = el;
+          }}
+          className="interior-slide"
+          style={{ backgroundImage: `url(${img})` }}
+        />
+      ))}
+      <div className="interior-slider-overlay" />
+      <div className="interior-dots">
+        {interiorImages.map((_, i) => (
+          <span key={i} className={i === active ? "active" : ""} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -1160,10 +1235,7 @@ export default function Home() {
           </div>
         </div>
         <div className="interior-photo reveal">
-          <div className="photo-caption">
-            <b>Designed for your comfort</b>
-            <span>Quiet. Spacious. Connected.</span>
-          </div>
+          <InteriorSlider />
         </div>
       </section>
 
@@ -1418,9 +1490,9 @@ export default function Home() {
             <em>in real time.</em>
           </h2>
           <p>
-            Every EV bus is fitted with GPS so you always know exactly where it
-            is and when it will reach your stop — right from your phone, no
-            guesswork needed.
+            No more standing at the stop and guessing. Every EV Green Bus shares
+            its live location the moment it leaves the terminal, so you can time
+            your walk, skip the wait and step on right when it arrives.
           </p>
           <div className="track-features">
             <div>
@@ -1428,8 +1500,10 @@ export default function Home() {
                 <Icon name="pin" />
               </span>
               <div>
-                <b>Live GPS position</b>
-                <span>See your bus move on the map in real time</span>
+                <b>See it move, live</b>
+                <span>
+                  Watch your bus travel the route stop by stop on the map
+                </span>
               </div>
             </div>
             <div>
@@ -1437,8 +1511,10 @@ export default function Home() {
                 <Icon name="clock" />
               </span>
               <div>
-                <b>Accurate arrival times</b>
-                <span>Predictions that update as traffic changes</span>
+                <b>Smarter arrival times</b>
+                <span>
+                  Estimates adjust automatically with real traffic conditions
+                </span>
               </div>
             </div>
             <div>
@@ -1446,8 +1522,10 @@ export default function Home() {
                 <Icon name="bell" />
               </span>
               <div>
-                <b>Stop alerts</b>
-                <span>Get notified a few minutes before your stop</span>
+                <b>Never miss your stop</b>
+                <span>
+                  A gentle alert reaches you a few minutes before arrival
+                </span>
               </div>
             </div>
           </div>
@@ -1486,11 +1564,48 @@ export default function Home() {
       </section>
 
       <section className="updates section" id="updates">
-        <div className="reveal">
+        <div className="reveal updates-intro">
           <p className="eyebrow green">05 — SERVICE UPDATES</p>
           <h2>
             Good to <em>know.</em>
           </h2>
+          <p>
+            Everything worth knowing before you ride — schedule changes, weekend
+            timings and fleet news — collected in one place, so nothing catches
+            you off guard.
+          </p>
+          <div className="updates-highlights">
+            <div>
+              <span className="mini-icon">
+                <Icon name="bell" />
+              </span>
+              <div>
+                <b>Real-time alerts</b>
+                <span>Sent straight to your phone the moment plans change</span>
+              </div>
+            </div>
+            <div>
+              <span className="mini-icon">
+                <Icon name="calendar" />
+              </span>
+              <div>
+                <b>Refreshed weekly</b>
+                <span>New notices posted every Monday morning</span>
+              </div>
+            </div>
+            <div>
+              <span className="mini-icon">
+                <Icon name="check" />
+              </span>
+              <div>
+                <b>Verified by our team</b>
+                <span>Every update confirmed by terminal operations</span>
+              </div>
+            </div>
+          </div>
+          <a className="button ghost updates-cta" href="#contact">
+            Report an issue <Icon name="arrow" size={15} />
+          </a>
         </div>
         <div className="update-list">
           <article className="reveal-item">
@@ -1578,21 +1693,52 @@ export default function Home() {
           </h2>
           <p>
             Questions about a route, a lost item or accessibility? Our friendly
-            team is here for you.
+            team is here for you every day of the week.
           </p>
-          <div className="contact-details">
-            <span>
-              <Icon name="phone" /> 0800 6282 000
-            </span>
-            <span>
-              <Icon name="pin" /> Central Terminal, City Center
-            </span>
+          <div className="contact-cards">
+            <div className="contact-card">
+              <span className="mini-icon">
+                <Icon name="phone" />
+              </span>
+              <div>
+                <b>Call us</b>
+                <span>0800 6282 000</span>
+              </div>
+            </div>
+            <div className="contact-card">
+              <span className="mini-icon">
+                <Icon name="mail" />
+              </span>
+              <div>
+                <b>Email us</b>
+                <span>support@evgreenbus.pk</span>
+              </div>
+            </div>
+            <div className="contact-card">
+              <span className="mini-icon">
+                <Icon name="pin" />
+              </span>
+              <div>
+                <b>Visit us</b>
+                <span>Central Terminal, City Center</span>
+              </div>
+            </div>
+            <div className="contact-card">
+              <span className="mini-icon">
+                <Icon name="clock" />
+              </span>
+              <div>
+                <b>Working hours</b>
+                <span>Daily · 06:00 AM – 11:00 PM</span>
+              </div>
+            </div>
           </div>
         </div>
         <form
           className="contact-form glass reveal"
           onSubmit={(e) => e.preventDefault()}
         >
+          <p className="contact-form-title">Send us a message</p>
           <label>
             YOUR NAME
             <input placeholder="e.g. Alex Morgan" />
@@ -1616,29 +1762,149 @@ export default function Home() {
           </button>
         </form>
       </section>
+      
       <footer>
-        <a className="brand" href="#home">
-          <span className="brandmark">
-            <img
-              src="/logo.png"
-              alt="EV Green Bus logo"
-              className="brandmark-img"
-              onError={(e) => {
-                (e.currentTarget as HTMLImageElement).style.display = "none";
-              }}
-            />
-          </span>
-          <span>
-            EV<small>GREEN BUS</small>
-          </span>
-        </a>
-        <p>Smarter, greener journeys for everyone.</p>
-        <div>
-          <a href="#routes">Routes</a>
-          <a href="#team">Team</a>
-          <a href="#contact">Contact</a>
+        <div
+          className="footer-bg"
+          style={{ backgroundImage: `url(${footerImage})` }}
+        />
+        <div className="footer-overlay" />
+
+        <div className="footer-inner">
+          <div className="footer-top reveal">
+            <div>
+              <p className="eyebrow">
+                <span /> JOIN THE MOVEMENT
+              </p>
+              <h3>
+                Ready for a smarter, <em>greener</em> commute?
+              </h3>
+            </div>
+            <a className="button primary" href="#planner">
+              Plan a journey <Icon name="arrow" />
+            </a>
+          </div>
+
+          <div className="footer-grid">
+            <div className="footer-col footer-brand">
+              <a className="brand" href="#home">
+                <span className="brandmark">
+                  <img
+                    src="/logo.png"
+                    alt="EV Green Bus logo"
+                    className="brandmark-img"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).style.display =
+                        "none";
+                    }}
+                  />
+                </span>
+                <span>
+                  EV<small>GREEN BUS</small>
+                </span>
+              </a>
+              <p>
+                Comfortable, reliable and 100% electric transportation for a
+                city that keeps moving forward.
+              </p>
+              <div className="footer-social">
+                <a href="#" aria-label="Facebook">
+                  <Icon name="facebook" size={16} />
+                </a>
+                <a href="#" aria-label="Instagram">
+                  <Icon name="instagram" size={16} />
+                </a>
+                <a href="#" aria-label="Twitter">
+                  <Icon name="twitter" size={16} />
+                </a>
+              </div>
+            </div>
+
+            <div className="footer-col">
+              <h4>Quick Links</h4>
+              <div className="footer-links">
+                <a href="#routes">
+                  <Icon name="arrow" size={12} /> Routes
+                </a>
+                <a href="#team">
+                  <Icon name="arrow" size={12} /> Team
+                </a>
+                <a href="#contact">
+                  <Icon name="arrow" size={12} /> Contact
+                </a>
+              </div>
+            </div>
+
+            <div className="footer-col">
+              <h4>Get in touch</h4>
+              <div className="footer-contact">
+                <div className="footer-contact-item">
+                  <span className="footer-info-icon">
+                    <Icon name="phone" size={25} />
+                  </span>
+                  <div>
+                    <b>Call us</b>
+                    <span>0800 6282 000</span>
+                  </div>
+                </div>
+                <div className="footer-contact-item">
+                  <span className="footer-info-icon">
+                    <Icon name="mail" size={25} />
+                  </span>
+                  <div>
+                    <b>Email</b>
+                    <span>support@evgreenbus.pk</span>
+                  </div>
+                </div>
+                <div className="footer-contact-item">
+                  <span className="footer-info-icon">
+                    <Icon name="pin" size={25} />
+                  </span>
+                  <div>
+                    <b>Address</b>
+                    <span>Central Terminal, City Center</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="footer-col">
+              <h4>Service hours</h4>
+              <div className="footer-contact">
+                <div className="footer-contact-item">
+                  <span className="footer-info-icon">
+                    <Icon name="calendar" size={25} />
+                  </span>
+                  <div>
+                    <b>Open days</b>
+                    <span>Monday – Sunday</span>
+                  </div>
+                </div>
+                <div className="footer-contact-item">
+                  <span className="footer-info-icon">
+                    <Icon name="clock" size={45} />
+                  </span>
+                  <div>
+                    <b>Hours</b>
+                    <span>06:00 AM – 10:00 PM</span>
+                  </div>
+                </div>
+                <div className="footer-contact-item">
+                  <span className="footer-info-icon">
+                    <Icon name="bolt" size={25} />
+                  </span>
+                  <div>
+                    <b className="footer-lime">100% Electric fleet</b>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <small>
+            © 2026 EV Green Bus Service - <b>Faqeer Faisal Latif Sultan</b>
+          </small>
         </div>
-        <small>© 2026 EV Green Bus Service - <b>Faqeer Faisal Latif Sultan</b> </small>
       </footer>
     </main>
   );

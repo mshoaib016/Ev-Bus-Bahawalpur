@@ -50,9 +50,9 @@ export const metadata: Metadata = {
   },
   applicationName: "EV Green Bus",
   icons: {
-    icon: { url: "/favicon.svg", type: "image/svg+xml" },
-    shortcut: "/favicon.svg",
-    apple: "/favicon.svg",
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
   },
 };
 
