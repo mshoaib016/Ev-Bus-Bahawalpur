@@ -1,9 +1,9 @@
 const isGithubPages = process.env.GITHUB_PAGES === "true";
-const repoName = "Ev-Bus-Bahawalpur"; // 👈 apne exact GitHub repo ka naam yahan likho
+const repoName = "Ev-Bus-Bahawalpur";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
+  ...(isGithubPages ? { output: "export" } : {}),
   basePath: isGithubPages ? `/${repoName}` : "",
   assetPrefix: isGithubPages ? `/${repoName}/` : "",
   images: { unoptimized: true },
