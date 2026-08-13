@@ -3,6 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+// import Managerpic from "/team/manager.png";
+
+// 👇 FIXED: images inside /public are served from the SITE ROOT, not "../public".
+// - On localhost, NEXT_PUBLIC_BASE_PATH is unset -> BASE_PATH = "" -> paths become "/img.png" (correct).
+// - On GitHub Pages (served at username.github.io/REPO_NAME/), set
+//   NEXT_PUBLIC_BASE_PATH=/REPO_NAME in a .env.production file (or in next.config.js env)
+//   -> paths become "/REPO_NAME/img.png" (correct for the subfolder GitHub Pages uses).
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -744,18 +752,30 @@ const manager = {
   name: "Zain Ul Islam Dogar",
   role: "Terminal Manager",
   bio: "Oversees daily terminal operations, bus scheduling, staff management and ensures the best travel experience for all passengers.",
-  img: "/team/manager.png",
+  img: `${BASE_PATH}/team/manager.png`,
 };
 
 const team = [
   {
     name: "Muhammad Shahbaz",
     role: "Night Operation Supervisor",
-    img: "/team/shahbaz.png",
+    img: `${BASE_PATH}/team/shahbaz.png`,
   },
-  { name: "Farhan Abbasi", role: "Route Officer", img: "/team/farhan.png" },
-  { name: "Umar Nazeer", role: "Route Officer", img: "/team/umar.png" },
-  { name: "Athar Iqbal Sameja", role: "Route Officer", img: "/team/athar.png" },
+  {
+    name: "Farhan Abbasi",
+    role: "Route Officer",
+    img: `${BASE_PATH}/team/farhan.png`,
+  },
+  {
+    name: "Umar Nazeer",
+    role: "Route Officer",
+    img: `${BASE_PATH}/team/umar.png`,
+  },
+  {
+    name: "Athar Iqbal Sameja",
+    role: "Route Officer",
+    img: `${BASE_PATH}/team/athar.png`,
+  },
 ];
 
 const fallbackAvatar = (name: string) =>
@@ -763,16 +783,20 @@ const fallbackAvatar = (name: string) =>
 
 // 👇 Hero slider photos — swap these 3 URLs for your own bus photos any time
 const heroImages = [
-  "/hero-banner-1.png",
-  "/hero-banner-2.png",
-  "/hero-banner-3.png",
+  `${BASE_PATH}/hero-banner-1.png`,
+  `${BASE_PATH}/hero-banner-2.png`,
+  `${BASE_PATH}/hero-banner-3.png`,
 ];
 
 // 👇 Interior slider photos — swap these 3 URLs for your own interior photos any time
-const interiorImages = ["/Banner-1.jpg", "/Banner-2.jpg", "/Banner-3.jpg"];
+const interiorImages = [
+  `${BASE_PATH}/Banner-1.jpg`,
+  `${BASE_PATH}/Banner-2.jpg`,
+  `${BASE_PATH}/Banner-3.jpg`,
+];
 
 // 👇 Footer background photo — sits under a green tint/overlay (see .footer-overlay)
-const footerImage = "/footer-bg.png";
+const footerImage = `${BASE_PATH}/footer-bg.png`;
 
 function VisitorTools() {
   const [poster, setPoster] = useState(false);
@@ -1089,7 +1113,7 @@ export default function Home() {
         <a className="brand" href="#home">
           <span className="brandmark">
             <img
-              src="/logo.png"
+              src={`${BASE_PATH}/logo.png`}
               alt="EV Green Bus logo"
               className="brandmark-img"
               onError={(e) => {
@@ -1474,8 +1498,8 @@ export default function Home() {
       <section className="track section" id="track">
         <div className="track-photo reveal">
           <img
-            src="/img.png"
-            alt="Passenger checking live bus tracking inside a EV Green Bus"
+            src={`${BASE_PATH}/img.png`}
+            alt="Passenger inside a EV Green Bus"
           />
           <div className="track-photo-badge">
             <span className="pulse" />
@@ -1762,7 +1786,6 @@ export default function Home() {
           </button>
         </form>
       </section>
-      
       <footer>
         <div
           className="footer-bg"
@@ -1790,7 +1813,7 @@ export default function Home() {
               <a className="brand" href="#home">
                 <span className="brandmark">
                   <img
-                    src="/logo.png"
+                    src={`${BASE_PATH}/logo.png`}
                     alt="EV Green Bus logo"
                     className="brandmark-img"
                     onError={(e) => {

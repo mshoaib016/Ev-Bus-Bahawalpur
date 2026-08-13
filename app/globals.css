@@ -61,8 +61,6 @@ nav {
   margin-top: 2px;
   opacity: 0.75;
 }
-/* 👉 Fallback-safe logo box: shows the lime rounded square even if /logo.png
-   hasn't been uploaded yet or fails to load (see onError in page.tsx) */
 .brandmark {
   width: 46px;
   height: 46px;
@@ -439,7 +437,6 @@ em {
 .interior-photo:hover {
   transform: scale(1.01);
 }
-/* 👇 Interior slider — 3 cross-fading images replacing the static banner */
 .interior-slider-wrap {
   position: absolute;
   inset: 0;
@@ -453,12 +450,6 @@ em {
   background-position: center;
   background-repeat: no-repeat;
   opacity: 0;
-}
-.interior-slider-overlay {
-  /* position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1; */
 }
 .interior-dots {
   position: absolute;
@@ -480,26 +471,6 @@ em {
   border-radius: 5px;
   background: var(--lime);
 }
-/* .photo-caption {
-  position: absolute;
-  right: 25px;
-  bottom: 21px;
-  color: white;
-  background: rgba(13, 42, 29, 0.7);
-  backdrop-filter: blur(8px);
-  padding: 15px 19px;
-  border-radius: 10px;
-  display: grid;
-  gap: 4px;
-  z-index: 2;
-} */
-/* .photo-caption b {
-  font-size: 14px;
-} */
-/* .photo-caption span {
-  font-size: 12px;
-  color: #d8e5de;
-} */
 .section-head {
   display: flex;
   justify-content: space-between;
@@ -690,8 +661,6 @@ em {
   background: var(--green);
   color: #fff;
 }
-/* 👇 Stop list + schedule table — slim styled scrollbar instead of the
-   default browser slider, so the panels feel native to the design */
 .stop-list,
 .schedule-table {
   border: 1px solid var(--line);
