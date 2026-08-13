@@ -920,7 +920,7 @@ function VisitorTools() {
               ×
             </button>
             <p className="eyebrow">
-              <span /> WELCOME ABOARD
+              <span /> WELCOME TO EV BUS BAHAWALPUR <span />
             </p>
             <h2>
               Move towards a<br />
@@ -1744,7 +1744,7 @@ export default function Home() {
               </span>
               <div>
                 <b>Visit us</b>
-                <span>Central Terminal, City Center</span>
+                <span>Bahawalpur Punjab, Pakistan</span>
               </div>
             </div>
             <div className="contact-card">
@@ -1885,7 +1885,7 @@ export default function Home() {
                   </span>
                   <div>
                     <b>Address</b>
-                    <span>Central Terminal, City Center</span>
+                    <span>Bahawalpur, Punjab, Pakistan</span>
                   </div>
                 </div>
               </div>
